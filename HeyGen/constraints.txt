@@ -1,0 +1,7 @@
+numpy==1.23.5                               # VisibleDeprecationWarning intact :contentReference[oaicite:6]{index=6}
+torch==1.13.1+cu117  --extra-index-url https://download.pytorch.org/whl/cu117
+torchvision==0.14.1+cu117
+torchaudio==0.13.1+cu117
+pillow<11.0                                  # Gradio requires <11.0 :contentReference[oaicite:7]{index=7}
+gradio==4.46.3                               # bool-schema bug fixed :contentReference[oaicite:8]{index=8}
+typer>=0.12,<1.0                             # gradio CLI dep :contentReference[oaicite:9]{index=9}
