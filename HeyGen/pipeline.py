@@ -15,22 +15,28 @@ class AvatarPipeline:
     # ---------- still image ----------
     def still2vid(self, img:str, wav:str, out_mp4:str, res:int=256):
         cmd = [
-            "python", self.sadtalker/"inference_sadtalker.py",
-            "--source_image", img, "--driven_audio", wav,
-            "--result_dir", Path(out_mp4).parent, "--size", str(res),
-            "--fp16", "--still"
+            "python", str(self.sadtalker/"inference_sadtalker.py"), # Convert Path to str
+            "--source_image", img,
+            "--driven_audio", wav,
+            "--result_dir", str(Path(out_mp4).parent), # Convert Path to str
+            "--size", str(res),
+            # "--fp16", # Removed --fp16 as it's not a standard SadTalker argument
+            "--still"
         ]
         subprocess.run(cmd, check=True)
+        # Assuming SadTalker's inference.py saves output as result_dir/timestamp_string.mp4
+        # This renaming logic should then be correct.
         newest = max(Path(out_mp4).parent.glob("*.mp4"), key=lambda p: p.stat().st_mtime)
         newest.rename(out_mp4)
 
     # ---------- reference video ----------
     def video2vid(self, video:str, wav:str, out_mp4:str):
         cmd = [
-            "python", self.wav2lip/"inference.py",
-            "--checkpoint_path", self.wav2lip/"checkpoints/wav2lip_gan.pth",
-            "--face", video, "--audio", wav,
-            "--outfile", out_mp4
+            "python", str(self.wav2lip/"inference.py"), # Convert Path to str
+            "--checkpoint_path", str(self.wav2lip/"checkpoints/wav2lip_gan.pth"), # Convert Path to str
+            "--face", video,
+            "--audio", wav, # This is already str when called from generate()
+            "--outfile", out_mp4 # This is already str when called from generate()
         ]
         subprocess.run(cmd, check=True)
 
